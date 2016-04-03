@@ -23,7 +23,11 @@ public class Solution {
     public static final class Cache {
         static HashMap<Integer, String> cache = new HashMap<>();
 
-        public static boolean checCachekLine(int lineNumber) {
+        public Cache() {
+
+        }
+
+        public static boolean checkCacheLine(int lineNumber) {
             return cache.containsKey(lineNumber);
         }
 
@@ -38,19 +42,29 @@ public class Solution {
             }
             return "";
         }
+
+        protected void finalize() {
+            try {
+                super.finalize();
+            } catch (Throwable e){}
+            cache = null;
+            System.out.println("cache cleared");
+        }
     }
 
     public static String getLine(int lineNumber) {
-        if (Cache.checCachekLine(lineNumber)) {
+        if (Cache.checkCacheLine(lineNumber)) {
+            System.out.println("reading from cache:");
             return Cache.getStringFromCache(lineNumber);
         }
 
+        System.out.println("reading from file:");
         String temp = readLineFromFile("text.txt", lineNumber);
         Cache.addLineToCache(lineNumber, temp);
         return temp;
     }
 
-    public static String readLineFromFile(String fileName, int lineNumber) {
+    public static   String readLineFromFile(String fileName, int lineNumber) {
         int num = 0;
 
         try {
@@ -66,5 +80,7 @@ public class Solution {
 
         return "Line does not exist";
     }
+
+
 
 }
